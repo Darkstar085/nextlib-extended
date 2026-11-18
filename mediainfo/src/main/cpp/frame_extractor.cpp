@@ -281,13 +281,13 @@ jobject frame_extractor_get_frame(JNIEnv *env, int64_t jFrameLoaderContextHandle
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_io_github_anilbeesetti_nextlib_mediainfo_FrameLoader_nativeRelease(JNIEnv *env, jclass clazz,
+Java_com_sipun_nextlib_mediainfo_FrameLoader_nativeRelease(JNIEnv *env, jclass clazz,
                                                                         jlong jFrameLoaderContextHandle) {
     frame_loader_context_free(jFrameLoaderContextHandle);
 }
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_io_github_anilbeesetti_nextlib_mediainfo_FrameLoader_nativeLoadFrame(JNIEnv *env, jclass clazz,
+Java_com_sipun_nextlib_mediainfo_FrameLoader_nativeLoadFrame(JNIEnv *env, jclass clazz,
                                                                           jlong jFrameLoaderContextHandle,
                                                                           jlong time_millis,
                                                                           jobject jBitmap) {
@@ -297,7 +297,7 @@ Java_io_github_anilbeesetti_nextlib_mediainfo_FrameLoader_nativeLoadFrame(JNIEnv
 }
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_io_github_anilbeesetti_nextlib_mediainfo_FrameLoader_nativeGetFrame(JNIEnv *env, jclass clazz,
+Java_com_sipun_nextlib_mediainfo_FrameLoader_nativeGetFrame(JNIEnv *env, jclass clazz,
                                                                          jlong jFrameLoaderContextHandle,
                                                                          jlong time_millis) {
     return frame_extractor_get_frame(env, jFrameLoaderContextHandle, time_millis);

@@ -13,7 +13,7 @@ ndk = Path(os.environ.get('ANDROID_NDK_HOME', sdk / 'ndk' / version))
 host = 'darwin-x86_64' if os.uname().sysname == 'Darwin' else 'linux-x86_64'
 tools = ndk / 'toolchains/llvm/prebuilt' / host / 'bin'
 assert (tools / 'llvm-readelf').is_file(), 'Set ANDROID_HOME or ANDROID_NDK_HOME to the build toolchain'
-abis = {'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'}
+abis = {'armeabi-v7a', 'arm64-v8a'}
 system_libraries = {'libc.so', 'libm.so', 'libdl.so', 'libz.so', 'liblog.so', 'libandroid.so', 'libjnigraphics.so'}
 
 with tempfile.TemporaryDirectory() as temporary:

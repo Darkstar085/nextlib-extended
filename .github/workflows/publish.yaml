@@ -1,12 +1,11 @@
-name: Publish
+name: Build & Release
 
 on:
-  push:
-    branches: [ "release/**" ]
+  workflow_dispatch:
 
 jobs:
   build:
-    name: Publish nextlib
+    name: Build & Release nextlib-extended
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -14,11 +13,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Get updated version name
+      - name: Get version
         run: |
-          BRANCH_NAME="${{ github.ref_name }}"
-          VERSION=${BRANCH_NAME#release/}
-          
+          VERSION=$(./gradlew properties -q | sed -n 's/^version: //p')
           echo "VERSION_NAME=${VERSION}" >> $GITHUB_ENV
 
       - name: Set Up JDK 17
@@ -38,7 +35,13 @@ jobs:
         uses: gradle/actions/setup-gradle@v6
         with:
           validate-wrappers: true
-          cache-cleanup: always
+
+      - name: Restore FFmpeg cache
+        uses: actions/cache@v4
+        id: ffmpeg-cache
+        with:
+          path: ffmpeg/output
+          key: ${{ runner.os }}-ffmpeg-${{ hashFiles('ffmpeg/setup.sh', 'gradle/libs.versions.toml') }}
 
       - name: Install native build tools
         run: |
@@ -46,6 +49,9 @@ jobs:
           python3 -m venv "$RUNNER_TEMP/native-build-tools"
           "$RUNNER_TEMP/native-build-tools/bin/pip" install meson==1.12.0
           echo "$RUNNER_TEMP/native-build-tools/bin" >> "$GITHUB_PATH"
+
+      - name: Check FFmpeg setup
+        run: python3 ffmpeg/test_setup.py
 
       - name: Build and check native packages
         run: |
@@ -57,15 +63,14 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_PRIVATE_KEY }}
 
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v3
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           draft: false
           name: v${{ env.VERSION_NAME }}

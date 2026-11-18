@@ -241,7 +241,7 @@ void media_info_build(JNIEnv *env, jobject jMediaInfoBuilder, const char *uri, i
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_io_github_anilbeesetti_nextlib_mediainfo_MediaInfoBuilder_nativeCreateFromFD(JNIEnv *env,
+Java_com_sipun_nextlib_mediainfo_MediaInfoBuilder_nativeCreateFromFD(JNIEnv *env,
                                                                                   jobject thiz,
                                                                                   jint file_descriptor) {
     media_info_build(env, thiz, "descriptor", file_descriptor);
@@ -249,7 +249,7 @@ Java_io_github_anilbeesetti_nextlib_mediainfo_MediaInfoBuilder_nativeCreateFromF
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_io_github_anilbeesetti_nextlib_mediainfo_MediaInfoBuilder_nativeCreateFromPath(JNIEnv *env,
+Java_com_sipun_nextlib_mediainfo_MediaInfoBuilder_nativeCreateFromPath(JNIEnv *env,
                                                                                     jobject thiz,
                                                                                     jstring jFilePath) {
     const char *cFilePath = env->GetStringUTFChars(jFilePath, nullptr);

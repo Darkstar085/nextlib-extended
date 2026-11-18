@@ -25,21 +25,25 @@ val ffmpegSetup = tasks.register<Exec>("ffmpegSetup") {
     commandLine("bash", "setup.sh")
 }
 
+val libraryVersion = "${libs.versions.androidxMedia3.get()}-1.0.0"
+version = libraryVersion
+
 subprojects {
+    version = libraryVersion
     plugins.withId(rootProject.libs.plugins.mavenPublish.get().pluginId) {
         configure<com.vanniktech.maven.publish.MavenPublishBaseExtension> {
             publishToMavenCentral()
             signAllPublications()
             coordinates(
-                groupId = "io.github.anilbeesetti",
+                groupId = "io.github.darkstar085",
                 artifactId = property("POM_ARTIFACT_ID") as String,
-                version = "${libs.versions.androidxMedia3.get()}-0.19.0"
+                version = libraryVersion
             )
 
             pom {
                 name = property("POM_NAME") as String
                 description = property("POM_DESCRIPTION") as String
-                url = "https://github.com/anilbeesetti/nextlib"
+                url = "https://github.com/Darkstar085/nextlib-extended"
 
                 licenses {
                     license {
@@ -50,12 +54,12 @@ subprojects {
                 }
                 developers {
                     developer {
-                        id = "anilbeesetti"
-                        name = "Anil Kumar Beesetti"
+                        id = "Darkstar085"
+                        name = "S I P U N"
                     }
                 }
                 scm {
-                    url = "https://github.com/anilbeesetti/nextlib"
+                    url = "https://github.com/Darkstar085/nextlib-extended"
                 }
             }
         }

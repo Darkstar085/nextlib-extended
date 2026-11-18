@@ -351,7 +351,7 @@ static jlong create_context_from_source(const char *source, int descriptor = -1)
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_io_github_anilbeesetti_nextlib_mediainfo_MediaThumbnailRetriever_nativeCreateFromPath(
+Java_com_sipun_nextlib_mediainfo_MediaThumbnailRetriever_nativeCreateFromPath(
         JNIEnv *env,
         jobject thiz,
         jstring file_path) {
@@ -363,7 +363,7 @@ Java_io_github_anilbeesetti_nextlib_mediainfo_MediaThumbnailRetriever_nativeCrea
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_io_github_anilbeesetti_nextlib_mediainfo_MediaThumbnailRetriever_nativeCreateFromFD(
+Java_com_sipun_nextlib_mediainfo_MediaThumbnailRetriever_nativeCreateFromFD(
         JNIEnv *env,
         jobject thiz,
         jint file_descriptor) {
@@ -372,7 +372,7 @@ Java_io_github_anilbeesetti_nextlib_mediainfo_MediaThumbnailRetriever_nativeCrea
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_io_github_anilbeesetti_nextlib_mediainfo_MediaThumbnailRetriever_nativeGetDurationMillis(
+Java_com_sipun_nextlib_mediainfo_MediaThumbnailRetriever_nativeGetDurationMillis(
         JNIEnv *, jobject, jlong handle) {
     auto *context = context_from_handle(handle);
     int64_t duration = context->formatContext->duration;
@@ -381,7 +381,7 @@ Java_io_github_anilbeesetti_nextlib_mediainfo_MediaThumbnailRetriever_nativeGetD
 
 extern "C"
 JNIEXPORT jbyteArray JNICALL
-Java_io_github_anilbeesetti_nextlib_mediainfo_MediaThumbnailRetriever_nativeGetEmbeddedPicture(
+Java_com_sipun_nextlib_mediainfo_MediaThumbnailRetriever_nativeGetEmbeddedPicture(
         JNIEnv *env,
         jobject thiz,
         jlong handle) {
@@ -418,7 +418,7 @@ Java_io_github_anilbeesetti_nextlib_mediainfo_MediaThumbnailRetriever_nativeGetE
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_io_github_anilbeesetti_nextlib_mediainfo_MediaThumbnailRetriever_nativeGetFrameAtTime(
+Java_com_sipun_nextlib_mediainfo_MediaThumbnailRetriever_nativeGetFrameAtTime(
         JNIEnv *env,
         jobject thiz,
         jlong handle,
@@ -433,7 +433,7 @@ Java_io_github_anilbeesetti_nextlib_mediainfo_MediaThumbnailRetriever_nativeGetF
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_io_github_anilbeesetti_nextlib_mediainfo_MediaThumbnailRetriever_nativeGetFrameAtIndex(
+Java_com_sipun_nextlib_mediainfo_MediaThumbnailRetriever_nativeGetFrameAtIndex(
         JNIEnv *env,
         jobject thiz,
         jlong handle,
@@ -448,7 +448,7 @@ Java_io_github_anilbeesetti_nextlib_mediainfo_MediaThumbnailRetriever_nativeGetF
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_io_github_anilbeesetti_nextlib_mediainfo_MediaThumbnailRetriever_nativeGetRotationDegrees(
+Java_com_sipun_nextlib_mediainfo_MediaThumbnailRetriever_nativeGetRotationDegrees(
         JNIEnv *env,
         jobject thiz,
         jlong handle) {
@@ -461,7 +461,7 @@ Java_io_github_anilbeesetti_nextlib_mediainfo_MediaThumbnailRetriever_nativeGetR
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_io_github_anilbeesetti_nextlib_mediainfo_MediaThumbnailRetriever_nativeRelease(
+Java_com_sipun_nextlib_mediainfo_MediaThumbnailRetriever_nativeRelease(
         JNIEnv *env,
         jobject thiz,
         jlong handle) {

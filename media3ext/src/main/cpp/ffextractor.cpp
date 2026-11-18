@@ -116,7 +116,7 @@ const char *mime(AVCodecID id) {
 }
 
 extern "C" JNIEXPORT jlong JNICALL
-Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegProgressiveMediaExtractor_nativeOpen(
+Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegProgressiveMediaExtractor_nativeOpen(
         JNIEnv *env, jobject owner) {
     auto *d = new Demuxer();
     d->env = env;
@@ -239,7 +239,7 @@ Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegProgressiveMediaEx
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
-Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegProgressiveMediaExtractor_nativeRead(
+Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegProgressiveMediaExtractor_nativeRead(
         JNIEnv *env, jobject, jlong handle) {
     auto *d = reinterpret_cast<Demuxer *>(handle);
     d->env = env;
@@ -271,7 +271,7 @@ Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegProgressiveMediaEx
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegProgressiveMediaExtractor_nativeSeek(
+Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegProgressiveMediaExtractor_nativeSeek(
         JNIEnv *env, jobject, jlong handle, jlong timeUs) {
     auto *d = reinterpret_cast<Demuxer *>(handle);
     d->env = env;
@@ -290,7 +290,7 @@ Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegProgressiveMediaEx
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegProgressiveMediaExtractor_nativeRelease(
+Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegProgressiveMediaExtractor_nativeRelease(
         JNIEnv *env, jobject, jlong handle) {
     auto *d = reinterpret_cast<Demuxer *>(handle);
     d->env = env;

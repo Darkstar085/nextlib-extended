@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "io.github.anilbeesetti.nextlib.media3ext"
+    namespace = "com.sipun.nextlib.media3ext"
     compileSdk = libs.versions.androidCompileSdk.get().toInt()
     ndkVersion = libs.versions.ndk.get()
 
@@ -22,7 +22,7 @@ android {
         }
 
         ndk {
-            abiFilters += listOf("x86", "x86_64", "armeabi-v7a", "arm64-v8a")
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a")
         }
     }
 
@@ -34,6 +34,18 @@ android {
     kotlin {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_17
+        }
+    }
+
+    sourceSets {
+        named("main") {
+            java.srcDirs("src/main/kotlin")
+        }
+        named("test") {
+            java.srcDirs("src/test/kotlin")
+        }
+        named("androidTest") {
+            java.srcDirs("src/androidTest/kotlin")
         }
     }
 

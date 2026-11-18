@@ -11,7 +11,7 @@ adb -s "$ANDROID_SERIAL" install -r media3ext/build/outputs/apk/androidTest/debu
 result=$(mktemp)
 trap 'rm -f "$result"' EXIT
 adb -s "$ANDROID_SERIAL" shell am instrument -w \
-    -e class io.github.anilbeesetti.nextlib.media3ext.ffdecoder.FfmpegTextRendererTest,io.github.anilbeesetti.nextlib.media3ext.ffdecoder.SubtitlePlaybackTest,io.github.anilbeesetti.nextlib.media3ext.ffdecoder.WebmWebvttOutputTest,io.github.anilbeesetti.nextlib.media3ext.ffdecoder.SubtitleViewportTest \
-    io.github.anilbeesetti.nextlib.media3ext.test/androidx.test.runner.AndroidJUnitRunner | tee "$result"
+    -e class com.sipun.nextlib.media3ext.ffdecoder.FfmpegTextRendererTest,com.sipun.nextlib.media3ext.ffdecoder.SubtitlePlaybackTest,com.sipun.nextlib.media3ext.ffdecoder.WebmWebvttOutputTest,com.sipun.nextlib.media3ext.ffdecoder.SubtitleViewportTest \
+    com.sipun.nextlib.media3ext.test/androidx.test.runner.AndroidJUnitRunner | tee "$result"
 # `am instrument` itself can exit successfully even when a test fails.
 grep -Eq '^OK \([0-9]+ tests?\)' "$result"

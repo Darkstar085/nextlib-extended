@@ -122,7 +122,7 @@ int utils_fields_init(JavaVM *vm) {
     } while (0)
 
     GET_CLASS(fields.MediaInfoBuilder.clazz,
-              "io/github/anilbeesetti/nextlib/mediainfo/MediaInfoBuilder", true);
+              "com/sipun/nextlib/mediainfo/MediaInfoBuilder", true);
 
     GET_ID(GetMethodID,
            fields.MediaInfoBuilder.onErrorID,

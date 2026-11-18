@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
         printf("PASS: libdav1d %d-bit, %d frames (%d drained), %s\n", depth, frames, delayed, pass ? "after seek/flush" : "initial decode");
         if (pass == 0) {
             assert(av_seek_frame(input, stream, 0, AVSEEK_FLAG_BACKWARD) >= 0);
-            assert(Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegReset(
+            assert(Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegReset(
                     &env, nullptr, reinterpret_cast<jlong>(jniContext.get())) != 0);
         }
     }

@@ -140,7 +140,7 @@ bool decodeBitmap(TextContext &context, const uint8_t *data, int length, int64_t
 }
 } // namespace
 
-#define JNI_METHOD(name) Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegSubtitleDecoder_##name
+#define JNI_METHOD(name) Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegSubtitleDecoder_##name
 
 extern "C" JNIEXPORT jlong JNICALL
 JNI_METHOD(nativeCreate)(JNIEnv *env, jobject, jstring codecName, jbyteArray header, jstring configPath, jobjectArray fonts) try {

@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "io.github.anilbeesetti.nextlib.mediainfo"
+    namespace = "com.sipun.nextlib.mediainfo"
     compileSdk = libs.versions.androidCompileSdk.get().toInt()
     ndkVersion = libs.versions.ndk.get()
 
@@ -21,7 +21,7 @@ android {
         }
 
         ndk {
-            abiFilters += listOf("x86", "x86_64", "armeabi-v7a", "arm64-v8a")
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a")
         }
     }
 

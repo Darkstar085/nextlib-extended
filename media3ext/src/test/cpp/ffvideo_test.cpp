@@ -209,7 +209,7 @@ static void CheckInvalidWindowBuffers() {
     JNIEnv env{&functions};
     AVFrame *frame = MakeFrame();
     Fill(frame, 63, 102, 240);
-    auto render = Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegRenderFrame;
+    auto render = Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegRenderFrame;
     for (int fault = 1; fault <= 5; fault++) {
         AImageReader *reader = nullptr;
         assert(AImageReader_new(frame->width, frame->height, AIMAGE_FORMAT_RGBA_8888, 2, &reader) == AMEDIA_OK);
@@ -290,7 +290,7 @@ static void CheckVp9PacketBackpressure(const char *filename, int frameCount, int
         assert(!context.pendingFrames.empty());
         if (pass == 0) {
             // Seeking must discard held output and let the same decoder start again.
-            assert(Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegReset(
+            assert(Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegReset(
                     nullptr, nullptr, reinterpret_cast<jlong>(&context)) != 0);
             assert(context.pendingFrames.empty());
             continue;
@@ -332,7 +332,7 @@ static void CheckPacketErrorOrigins() {
     injectedReceiveError = AVERROR_INVALIDDATA;
     lastErrorFunction = nullptr;
     // The send is rejected before touching this input; decoding earlier data fails.
-    int result = Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegSendPacket(
+    int result = Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegSendPacket(
             &env, nullptr, reinterpret_cast<jlong>(&context), reinterpret_cast<jobject>(bytes), 1, 42);
     assert(result == VIDEO_DECODER_ERROR_OTHER);
     assert(lastErrorFunction && strcmp(lastErrorFunction, "avcodec_receive_frame") == 0);
@@ -347,7 +347,7 @@ static void CheckPacketErrorOrigins() {
     assert(avcodec_open2(context.codecContext, codec, nullptr) == 0);
     lastErrorFunction = nullptr;
     // A malformed current packet is still skippable, unlike a receive failure.
-    result = Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegSendPacket(
+    result = Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegSendPacket(
             &env, nullptr, reinterpret_cast<jlong>(&context), reinterpret_cast<jobject>(bytes), 1, 43);
     assert(result == VIDEO_DECODER_ERROR_INVALID_DATA);
     assert(lastErrorFunction && strcmp(lastErrorFunction, "avcodec_send_packet") == 0);

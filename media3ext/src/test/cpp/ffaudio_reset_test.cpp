@@ -52,18 +52,18 @@ int main(int argc, char **argv) {
             else assert(decoded == expected);
             if (pass == 32) break;
             context = reinterpret_cast<AVCodecContext *>(
-                    Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegAudioDecoder_ffmpegReset(
+                    Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegAudioDecoder_ffmpegReset(
                             nullptr, nullptr, reinterpret_cast<jlong>(context), nullptr));
             assert(context);
         }
         if (outputFloat) assert(expected.size() == pcm16Bytes * 2);
         else pcm16Bytes = expected.size();
-        Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegAudioDecoder_ffmpegRelease(
+        Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegAudioDecoder_ffmpegRelease(
                 nullptr, nullptr, reinterpret_cast<jlong>(context));
         printf("PASS: TrueHD %s, 32 resets, identical PCM (%zu bytes per decode)\n",
                outputFloat ? "float" : "16-bit", expected.size());
     }
     for (AVPacket *sample : packets) av_packet_free(&sample);
-    assert(Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegAudioDecoder_ffmpegReset(
+    assert(Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegAudioDecoder_ffmpegReset(
             nullptr, nullptr, 0, nullptr) == 0);
 }

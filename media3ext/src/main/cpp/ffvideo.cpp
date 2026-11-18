@@ -337,7 +337,7 @@ JniContext *createVideoContext(JNIEnv *env,
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegInitialize(JNIEnv *env,
+Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegInitialize(JNIEnv *env,
                                                                                  jobject thiz,
                                                                                  jstring codec_name,
                                                                                  jbyteArray extra_data,
@@ -353,7 +353,7 @@ Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpe
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegReset(JNIEnv *env, jobject thiz,
+Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegReset(JNIEnv *env, jobject thiz,
                                                                             jlong jContext) {
     auto *const jniContext = reinterpret_cast<JniContext *>(jContext);
     AVCodecContext *context = jniContext->codecContext;
@@ -369,7 +369,7 @@ Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpe
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegRelease(JNIEnv *env, jobject thiz,
+Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegRelease(JNIEnv *env, jobject thiz,
                                                                               jlong jContext) {
     auto *const jniContext = reinterpret_cast<JniContext *>(jContext);
     if (jniContext) {
@@ -380,7 +380,7 @@ Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpe
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegReleaseFrame(
+Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegReleaseFrame(
         JNIEnv *, jobject, jlong frame_pointer) {
     auto *frame = reinterpret_cast<AVFrame *>(frame_pointer);
     av_frame_free(&frame);
@@ -388,7 +388,7 @@ Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpe
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegRenderFrame(JNIEnv *env,
+Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegRenderFrame(JNIEnv *env,
                                                                                   jobject thiz,
                                                                                   jlong jContext,
                                                                                   jobject surface,
@@ -444,7 +444,7 @@ Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpe
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegSendPacket(JNIEnv *env,
+Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegSendPacket(JNIEnv *env,
                                                                                  jobject thiz,
                                                                                  jlong jContext,
                                                                                  jobject encoded_data,
@@ -474,7 +474,7 @@ Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpe
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_io_github_anilbeesetti_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegReceiveFrame(JNIEnv *env,
+Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegVideoDecoder_ffmpegReceiveFrame(JNIEnv *env,
                                                                                    jobject thiz,
                                                                                    jlong jContext,
                                                                                    jint output_mode,

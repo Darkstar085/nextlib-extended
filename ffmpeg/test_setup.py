@@ -147,8 +147,6 @@ printf '%s\\n' "$PKG_CONFIG" "$CFLAGS" "$LDFLAGS" > toolchain.env
     result = run()
     assert result.returncode == 0, result
     for abi, toolchain, cpu in (
-        ('x86', 'i686-linux-android', 'x86'),
-        ('x86_64', 'x86_64-linux-android', 'x86_64'),
         ('armeabi-v7a', 'armv7a-linux-androideabi', 'arm'),
         ('arm64-v8a', 'aarch64-linux-android', 'aarch64'),
     ):
