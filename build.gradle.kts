@@ -25,7 +25,7 @@ val ffmpegSetup = tasks.register<Exec>("ffmpegSetup") {
     commandLine("bash", "setup.sh")
 }
 
-val libraryVersion = "${libs.versions.androidxMedia3.get()}-1.0.0"
+val libraryVersion = libs.versions.nextlibExtended.get()
 version = libraryVersion
 
 subprojects {

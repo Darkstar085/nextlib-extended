@@ -1,4 +1,5 @@
 [versions]
+nextlibExtended = "1.0.0"
 androidCompileSdk = "36"
 agp = "9.5.1"
 kotlin = "2.4.21"
