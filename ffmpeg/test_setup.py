@@ -15,7 +15,7 @@ def executable(path, body):
     path.chmod(0o755)
 
 
-with tempfile.TemporaryDirectory(prefix='nextlib setup ') as temp:
+with tempfile.TemporaryDirectory(prefix='nextlib-extended-setup-') as temp:
     root = Path(temp)
     ffmpeg = root / 'ffmpeg'
     ffmpeg.mkdir()

@@ -5,7 +5,7 @@ set -euo pipefail
 : "${ANDROID_SERIAL:?Set ANDROID_SERIAL to a disposable ARM64 emulator}"
 repo=$(cd "$(dirname "$0")/../../../.." && pwd)
 build=$(mktemp -d)
-device_dir=/data/local/tmp/nextlib-ffaudio-$(basename "$build")
+device_dir=/data/local/tmp/nextlib-extended-ffaudio-$(basename "$build")
 trap 'adb -s "$ANDROID_SERIAL" shell rm -rf "$device_dir" >/dev/null; rm -rf "$build"' EXIT
 compiler="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++"
 if [[ ! -x "$compiler" ]]; then

@@ -11,14 +11,12 @@ abi=$(adb -s "$ANDROID_SERIAL" shell getprop ro.product.cpu.abi | tr -d '\r')
 case "$abi" in
     arm64-v8a) target=aarch64-linux-android ;;
     armeabi-v7a) target=armv7a-linux-androideabi ;;
-    x86_64) target=x86_64-linux-android ;;
-    x86) target=i686-linux-android ;;
-    *) echo "Unsupported ABI: $abi" >&2; exit 1 ;;
+    *) echo "Unsupported ABI: $abi (NextLib Extended supports armeabi-v7a and arm64-v8a)" >&2; exit 1 ;;
 esac
 host=linux-x86_64
 [[ $(uname -s) != Darwin ]] || host=darwin-x86_64
 build=$(mktemp -d)
-remote=$(adb -s "$ANDROID_SERIAL" shell mktemp -d /data/local/tmp/nextlib-av1-bench.XXXXXX | tr -d '\r')
+remote=$(adb -s "$ANDROID_SERIAL" shell mktemp -d /data/local/tmp/nextlib-extended-av1-bench.XXXXXX | tr -d '\r')
 trap 'adb -s "$ANDROID_SERIAL" shell rm -rf "$remote"; rm -rf "$build"' EXIT
 "$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/$host/bin/clang++" \
     --target="${target}23" -std=c++17 -O2 -static-libstdc++ \

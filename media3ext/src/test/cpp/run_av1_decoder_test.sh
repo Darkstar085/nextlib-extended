@@ -7,9 +7,7 @@ abi=$(adb -s "$ANDROID_SERIAL" shell getprop ro.product.cpu.abi | tr -d '\r')
 case "$abi" in
     arm64-v8a) target=aarch64-linux-android ;;
     armeabi-v7a) target=armv7a-linux-androideabi ;;
-    x86_64) target=x86_64-linux-android ;;
-    x86) target=i686-linux-android ;;
-    *) echo "Unsupported ABI: $abi" >&2; exit 1 ;;
+    *) echo "Unsupported ABI: $abi (NextLib Extended supports armeabi-v7a and arm64-v8a)" >&2; exit 1 ;;
 esac
 repo=$(cd "$(dirname "$0")/../../../.." && pwd)
 build=$(mktemp -d)
@@ -25,7 +23,7 @@ fi
     -L"$repo/ffmpeg/output/lib/$abi" -lavformat -lavcodec -lavutil -lswscale -lswresample \
     -landroid -llog \
     -o "$build/av1_decoder_test"
-device_dir=$(adb -s "$ANDROID_SERIAL" shell mktemp -d /data/local/tmp/nextlib-av1-test.XXXXXX | tr -d '\r')
+device_dir=$(adb -s "$ANDROID_SERIAL" shell mktemp -d /data/local/tmp/nextlib-extended-av1-test.XXXXXX | tr -d '\r')
 trap 'adb -s "$ANDROID_SERIAL" shell rm -rf "$device_dir"; rm -rf "$build"' EXIT
 adb -s "$ANDROID_SERIAL" push "$build/av1_decoder_test" "$repo"/ffmpeg/output/lib/"$abi"/*.so "$device_dir/" >/dev/null
 for depth in 8 10; do

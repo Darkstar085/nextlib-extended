@@ -83,8 +83,7 @@ function setAbiToolchain() {
   case $ABI in
     armeabi-v7a) NATIVE_CPU=arm; NATIVE_TARGET=armv7a-linux-androideabi ;;
     arm64-v8a) NATIVE_CPU=aarch64; NATIVE_TARGET=aarch64-linux-android ;;
-    x86) NATIVE_CPU=x86; NATIVE_TARGET=i686-linux-android ;;
-    x86_64) NATIVE_CPU=x86_64; NATIVE_TARGET=x86_64-linux-android ;;
+    *) echo "Unsupported architecture: $ABI" >&2; exit 1 ;;
   esac
 }
 
@@ -189,19 +188,8 @@ function buildFfmpeg() {
       CPU=armv8-a
       ARCH=aarch64
       ;;
-    x86)
-      TOOLCHAIN=i686-linux-android21-
-      CPU=i686
-      ARCH=i686
-      EXTRA_BUILD_CONFIGURATION_FLAGS=--disable-asm
-      ;;
-    x86_64)
-      TOOLCHAIN=x86_64-linux-android21-
-      CPU=x86-64
-      ARCH=x86_64
-      ;;
     *)
-      echo "Unsupported architecture: $ABI"
+      echo "Unsupported architecture: $ABI" >&2
       exit 1
       ;;
     esac
@@ -234,7 +222,6 @@ function buildFfmpeg() {
       --disable-everything \
       --disable-vulkan \
       --disable-avdevice \
-      --disable-avformat \
       --disable-avfilter \
       --disable-symver \
       --enable-parsers \

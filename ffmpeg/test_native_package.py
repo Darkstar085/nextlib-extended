@@ -42,4 +42,4 @@ with tempfile.TemporaryDirectory() as temporary:
                     exported = {line.split()[-1] for line in symbols.splitlines()}
                     assert {'ass_library_init', 'ass_add_font', 'ass_render_frame'} <= exported, name
                     assert all(symbol.startswith('ass_') for symbol in exported), name
-        print(f'{module}: all four ABIs packaged with 16 KiB-compatible native libraries')
+        print(f'{module}: ARM ABIs ({", ".join(sorted(abis))}) packaged with 16 KiB-compatible native libraries')
