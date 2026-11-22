@@ -116,6 +116,13 @@ public final class FfmpegLibrary {
       case MimeTypes.AUDIO_ALAC -> "alac";
       case MimeTypes.AUDIO_MLAW -> "pcm_mulaw";
       case MimeTypes.AUDIO_ALAW -> "pcm_alaw";
+      case MimeTypes.AUDIO_RAW -> "pcm_s16le";
+      case "audio/x-ms-wma", "audio/wma" -> "wmav2";
+      case "audio/x-ape", "audio/ape" -> "ape";
+      case "audio/x-wavpack", "audio/wavpack" -> "wavpack";
+      case "audio/x-tta", "audio/tta" -> "tta";
+      case "audio/x-speex", "audio/speex" -> "speex";
+      case "audio/x-pn-realaudio" -> "cook";
 
       // Video codecs
       case MimeTypes.VIDEO_H264 -> "h264";
@@ -125,9 +132,25 @@ public final class FfmpegLibrary {
       case MimeTypes.VIDEO_MPEG2 -> "mpeg2video";
       case MimeTypes.VIDEO_VP8 -> "vp8";
       case MimeTypes.VIDEO_VP9 -> "vp9";
+      case MimeTypes.VIDEO_VC1, "video/wvc1", "video/x-ms-wmv", "video/x-wmv" -> "vc1";
+      case MimeTypes.VIDEO_MP4V, "video/mp4v-es", "video/divx" -> "mpeg4";
+      case MimeTypes.VIDEO_H263 -> "h263";
+      case MimeTypes.VIDEO_PRORES, "video/x-prores" -> "prores";
+      case MimeTypes.VIDEO_MJPEG -> "mjpeg";
+      case "video/x-flv", "video/x-flash-video" -> "flv1";
+      case "video/x-vp6" -> "vp6";
+      case "video/x-vp6f" -> "vp6f";
+      case "video/x-realvideo", "video/vnd.rn-realvideo" -> "rv40";
+      case "video/theora", "video/x-theora" -> "theora";
+      case "video/cinepak" -> "cinepak";
+
+      // Subtitle codecs
       case MimeTypes.APPLICATION_PGS -> "pgssub";
       case MimeTypes.APPLICATION_VOBSUB -> "dvdsub";
       case MimeTypes.APPLICATION_DVBSUBS -> "dvbsub";
+      case MimeTypes.TEXT_SSA -> "ass";
+      case MimeTypes.TEXT_VTT -> "webvtt";
+      case MimeTypes.APPLICATION_SUBRIP -> "subrip";
       default -> null;
     };
   }

@@ -312,9 +312,9 @@ JniContext *createVideoContext(JNIEnv *env,
         env->GetByteArrayRegion(extraData, 0, size, (jbyte *) codecContext->extradata);
     }
 
-    codecContext->thread_count = threads;
-    // Keep dav1d's frame threading enabled. DrainingDecoder handles delayed output
-    // and drains every frame at EOS instead of forcing one frame per input.
+    codecContext->thread_count = threads > 0 ? threads : 0;
+    codecContext->thread_type = FF_THREAD_FRAME | FF_THREAD_SLICE;
+    codecContext->flags2 |= AV_CODEC_FLAG2_FAST;
     codecContext->err_recognition = AV_EF_IGNORE_ERR;
     int result = avcodec_open2(codecContext, codec, nullptr);
     if (result < 0) {

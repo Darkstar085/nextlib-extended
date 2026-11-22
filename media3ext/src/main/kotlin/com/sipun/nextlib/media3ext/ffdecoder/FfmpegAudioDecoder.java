@@ -177,8 +177,7 @@ final class FfmpegAudioDecoder
       case MimeTypes.AUDIO_AAC, MimeTypes.AUDIO_OPUS -> initializationData.get(0);
       case MimeTypes.AUDIO_ALAC -> getAlacExtraData(initializationData);
       case MimeTypes.AUDIO_VORBIS -> getVorbisExtraData(initializationData);
-      // Other codecs do not require extra data.
-      default -> null;
+      default -> initializationData.get(0);
     };
   }
 

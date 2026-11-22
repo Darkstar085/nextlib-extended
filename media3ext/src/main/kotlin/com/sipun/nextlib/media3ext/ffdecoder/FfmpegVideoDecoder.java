@@ -85,19 +85,18 @@ final class FfmpegVideoDecoder extends
         if (initializationData.isEmpty()) return null;
         switch (mimeType) {
             case MimeTypes.VIDEO_H264 -> {
-                byte[] sps = initializationData.get(0);
-                byte[] pps = initializationData.get(1);
-                byte[] extraData = new byte[sps.length + pps.length];
-                System.arraycopy(sps, 0, extraData, 0, sps.length);
-                System.arraycopy(pps, 0, extraData, sps.length, pps.length);
-                return extraData;
-            }
-            case MimeTypes.VIDEO_H265 -> {
+                if (initializationData.size() >= 2) {
+                    byte[] sps = initializationData.get(0);
+                    byte[] pps = initializationData.get(1);
+                    byte[] extraData = new byte[sps.length + pps.length];
+                    System.arraycopy(sps, 0, extraData, 0, sps.length);
+                    System.arraycopy(pps, 0, extraData, sps.length, pps.length);
+                    return extraData;
+                }
                 return initializationData.get(0);
             }
             default -> {
-                // Other codecs do not require extra data.
-                return null;
+                return initializationData.get(0);
             }
         }
     }

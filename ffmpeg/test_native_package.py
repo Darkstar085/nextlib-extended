@@ -1,5 +1,6 @@
 """Check built release AARs using ANDROID_HOME (or ANDROID_NDK_HOME); no emulator needed."""
 import os
+import platform
 from pathlib import Path
 import re
 import subprocess
@@ -10,7 +11,7 @@ root = Path(__file__).resolve().parent.parent
 version = re.search(r'^ndk = "([^"]+)"', (root / 'gradle/libs.versions.toml').read_text(), re.M)[1]
 sdk = Path(os.environ.get('ANDROID_HOME', os.environ.get('ANDROID_SDK_ROOT', '')))
 ndk = Path(os.environ.get('ANDROID_NDK_HOME', sdk / 'ndk' / version))
-host = 'darwin-x86_64' if os.uname().sysname == 'Darwin' else 'linux-x86_64'
+host = 'darwin-x86_64' if platform.system() == 'Darwin' else 'linux-x86_64'
 tools = ndk / 'toolchains/llvm/prebuilt' / host / 'bin'
 assert (tools / 'llvm-readelf').is_file(), 'Set ANDROID_HOME or ANDROID_NDK_HOME to the build toolchain'
 abis = {'armeabi-v7a', 'arm64-v8a'}

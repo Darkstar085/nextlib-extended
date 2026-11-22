@@ -79,7 +79,27 @@ const char *mime(AVCodecID id) {
         case AV_CODEC_ID_H264: return "video/avc";
         case AV_CODEC_ID_HEVC: return "video/hevc";
         case AV_CODEC_ID_MPEG2VIDEO: return "video/mpeg2";
-        case AV_CODEC_ID_MPEG4: return "video/mp4v-es";
+        case AV_CODEC_ID_MPEG4:
+        case AV_CODEC_ID_MSMPEG4V1:
+        case AV_CODEC_ID_MSMPEG4V2:
+        case AV_CODEC_ID_MSMPEG4V3: return "video/mp4v-es";
+        case AV_CODEC_ID_VC1: return "video/wvc1";
+        case AV_CODEC_ID_WMV1:
+        case AV_CODEC_ID_WMV2:
+        case AV_CODEC_ID_WMV3: return "video/x-ms-wmv";
+        case AV_CODEC_ID_H263:
+        case AV_CODEC_ID_H263P: return "video/3gpp";
+        case AV_CODEC_ID_FLV1: return "video/x-flv";
+        case AV_CODEC_ID_VP6:
+        case AV_CODEC_ID_VP6F: return "video/x-vp6";
+        case AV_CODEC_ID_RV10:
+        case AV_CODEC_ID_RV20:
+        case AV_CODEC_ID_RV30:
+        case AV_CODEC_ID_RV40: return "video/x-realvideo";
+        case AV_CODEC_ID_MJPEG: return "video/mjpeg";
+        case AV_CODEC_ID_THEORA: return "video/theora";
+        case AV_CODEC_ID_PRORES: return "video/x-prores";
+        case AV_CODEC_ID_CINEPAK: return "video/cinepak";
         case AV_CODEC_ID_VP8: return "video/x-vnd.on2.vp8";
         case AV_CODEC_ID_VP9: return "video/x-vnd.on2.vp9";
         case AV_CODEC_ID_AV1: return "video/av01";
@@ -90,22 +110,37 @@ const char *mime(AVCodecID id) {
         case AV_CODEC_ID_VORBIS: return "audio/vorbis";
         case AV_CODEC_ID_FLAC: return "audio/flac";
         case AV_CODEC_ID_ALAC: return "audio/alac";
+        case AV_CODEC_ID_WMAV1:
+        case AV_CODEC_ID_WMAV2:
+        case AV_CODEC_ID_WMAPRO:
+        case AV_CODEC_ID_WMALOSSLESS: return "audio/x-ms-wma";
+        case AV_CODEC_ID_APE: return "audio/x-ape";
+        case AV_CODEC_ID_WAVPACK: return "audio/x-wavpack";
+        case AV_CODEC_ID_TTA: return "audio/x-tta";
+        case AV_CODEC_ID_SPEEX: return "audio/x-speex";
+        case AV_CODEC_ID_COOK:
+        case AV_CODEC_ID_RA_144:
+        case AV_CODEC_ID_RA_288: return "audio/x-pn-realaudio";
+        case AV_CODEC_ID_ADPCM_MS:
+        case AV_CODEC_ID_ADPCM_IMA_WAV:
+        case AV_CODEC_ID_ADPCM_IMA_QT:
+        case AV_CODEC_ID_PCM_U8:
+        case AV_CODEC_ID_PCM_S16LE:
+        case AV_CODEC_ID_PCM_S24LE:
+        case AV_CODEC_ID_PCM_S32LE:
+        case AV_CODEC_ID_PCM_F32LE: return "audio/raw";
         case AV_CODEC_ID_TRUEHD:
         case AV_CODEC_ID_MLP: return "audio/true-hd";
         case AV_CODEC_ID_AMR_NB: return "audio/3gpp";
         case AV_CODEC_ID_AMR_WB: return "audio/amr-wb";
         case AV_CODEC_ID_PCM_MULAW: return "audio/g711-mlaw";
         case AV_CODEC_ID_PCM_ALAW: return "audio/g711-alaw";
-        case AV_CODEC_ID_PCM_U8:
-        case AV_CODEC_ID_PCM_S16LE:
-        case AV_CODEC_ID_PCM_S24LE:
-        case AV_CODEC_ID_PCM_S32LE:
-        case AV_CODEC_ID_PCM_F32LE: return "audio/raw";
         case AV_CODEC_ID_AC3: return "audio/ac3";
         case AV_CODEC_ID_EAC3: return "audio/eac3";
         case AV_CODEC_ID_DTS: return "audio/vnd.dts";
         case AV_CODEC_ID_ASS:
         case AV_CODEC_ID_SSA: return "text/x-ssa";
+        case AV_CODEC_ID_WEBVTT: return "text/vtt";
         case AV_CODEC_ID_SUBRIP: return "application/x-subrip";
         case AV_CODEC_ID_HDMV_PGS_SUBTITLE: return "application/pgs";
         case AV_CODEC_ID_DVD_SUBTITLE: return "application/vobsub";
@@ -144,8 +179,8 @@ Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegProgressiveMediaExtractor_nativ
     d->format->max_analyze_duration = 5 * AV_TIME_BASE;
     d->format->max_streams = 128;
     AVDictionary *options = nullptr;
-    // Only self-contained containers; no playlists or demuxer-created external network/file reads.
-    av_dict_set(&options, "format_whitelist", "mov,matroska,webm,mpeg,mpegts,avi,asf,flv,ogg,wav,mp3,aac,flac,h264,hevc", 0);
+    // Self-contained containers; no playlists or demuxer-created external network/file reads.
+    av_dict_set(&options, "format_whitelist", "mov,matroska,webm,mpeg,mpegts,avi,asf,flv,ogg,wav,mp3,aac,flac,h264,hevc,rm,rmvb,wmv,vob,3gp,m4v,m2ts,mts,ape,wv,mka,dts,dtshd,ac3,eac3,ivf,sup", 0);
     av_dict_set(&options, "protocol_whitelist", "none", 0);
     int result = avformat_open_input(&d->format, nullptr, nullptr, &options);
     av_dict_free(&options);
@@ -174,15 +209,9 @@ Java_com_sipun_nextlib_media3ext_ffdecoder_FfmpegProgressiveMediaExtractor_nativ
         AVStream *stream = d->format->streams[i];
         AVCodecParameters *p = stream->codecpar;
         if (stream->disposition & AV_DISPOSITION_ATTACHED_PIC) continue;
-        if (p->color_trc == AVCOL_TRC_SMPTE2084 || p->color_trc == AVCOL_TRC_ARIB_STD_B67 ||
-            av_packet_side_data_get(p->coded_side_data, p->nb_coded_side_data, AV_PKT_DATA_MASTERING_DISPLAY_METADATA)) {
-            fail(env, "HDR metadata is not supported by FFmpeg extraction; use HW"); break;
-        }
         const char *type = mime(p->codec_id);
         if (!type) {
-            if (p->codec_type == AVMEDIA_TYPE_AUDIO || p->codec_type == AVMEDIA_TYPE_VIDEO) {
-                fail(env, "Unsupported FFmpeg extraction codec; use the standard reader"); break;
-            }
+            // Gracefully ignore unmapped streams so remaining valid streams continue to play.
             continue;
         }
         if (p->extradata_size < 0 || p->extradata_size > 1024 * 1024) {

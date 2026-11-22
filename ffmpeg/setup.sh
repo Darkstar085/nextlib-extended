@@ -25,7 +25,15 @@ MBEDTLS_DIR=$SOURCES_DIR/mbedtls-$MBEDTLS_VERSION
 # Configuration
 ANDROID_ABIS="armeabi-v7a arm64-v8a"
 ANDROID_PLATFORM=21
-ENABLED_DECODERS="vorbis opus flac alac pcm_mulaw pcm_alaw mp3 amrnb amrwb aac ac3 eac3 dca mlp truehd h264 hevc mpeg2video mpegvideo vp8 vp9 libdav1d pgssub dvdsub dvbsub"
+ENABLED_DECODERS="vorbis opus flac alac pcm_mulaw pcm_alaw mp3 amrnb amrwb aac ac3 eac3 dca mlp truehd \
+h264 hevc mpeg2video mpegvideo vp8 vp9 libdav1d pgssub dvdsub dvbsub \
+vc1 wmv1 wmv2 wmv3 mpeg4 msmpeg4v1 msmpeg4v2 msmpeg4v3 flv1 vp6 vp6f \
+rv10 rv20 rv30 rv40 mjpeg prores theora h263 h263p svq1 svq3 cinepak tscc tscc2 \
+wmav1 wmav2 wmapro wmalossless ape wavpack tta \
+adpcm_ms adpcm_ima_wav adpcm_ima_qt \
+pcm_s16le pcm_s24le pcm_s32le pcm_f32le \
+cook ra_144 ra_288 speex atrac3 atrac3p \
+ass ssa subrip webvtt"
 JOBS=$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || sysctl -n hw.physicalcpu 2>/dev/null || echo 4)
 
 # Gradle supplies these; standalone callers use the same pinned versions.
@@ -210,7 +218,7 @@ function buildFfmpeg() {
       --ar="${TOOLCHAIN_PREFIX}/bin/llvm-ar" \
       --ranlib="${TOOLCHAIN_PREFIX}/bin/llvm-ranlib" \
       --strip="${TOOLCHAIN_PREFIX}/bin/llvm-strip" \
-      --extra-cflags="-O3 -fPIC $DEP_CFLAGS" \
+      --extra-cflags="-O3 -fPIC -fstrict-aliasing -ftree-vectorize $DEP_CFLAGS" \
       --extra-ldflags="$DEP_LD_FLAGS -Wl,-z,max-page-size=16384" \
       --pkg-config="$(command -v pkg-config)" \
       --pkg-config-flags=--static \

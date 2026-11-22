@@ -1,5 +1,6 @@
 """Run with python3 ffmpeg/test_setup.py; no SDK downloads or native compilation."""
 import os
+import platform
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import threading
 from pathlib import Path
@@ -34,7 +35,7 @@ with tempfile.TemporaryDirectory(prefix='nextlib-extended-setup-') as temp:
     (ffmpeg / 'build').mkdir()
     (ffmpeg / 'output').mkdir()
     sdk = root / 'android sdk'
-    host = 'darwin-x86_64' if os.uname().sysname == 'Darwin' else 'linux-x86_64'
+    host = 'darwin-x86_64' if platform.system() == 'Darwin' else 'linux-x86_64'
     clang = sdk / 'ndk/test-ndk/toolchains/llvm/prebuilt' / host / 'bin/clang'
     cmake = sdk / 'cmake/test-cmake/bin/cmake'
     cli = root / 'android cli'
