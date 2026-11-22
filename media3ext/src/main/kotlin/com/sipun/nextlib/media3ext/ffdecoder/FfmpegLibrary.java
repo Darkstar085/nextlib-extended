@@ -132,10 +132,10 @@ public final class FfmpegLibrary {
       case MimeTypes.VIDEO_MPEG2 -> "mpeg2video";
       case MimeTypes.VIDEO_VP8 -> "vp8";
       case MimeTypes.VIDEO_VP9 -> "vp9";
-      case MimeTypes.VIDEO_VC1, "video/wvc1", "video/x-ms-wmv", "video/x-wmv" -> "vc1";
-      case MimeTypes.VIDEO_MP4V, "video/mp4v-es", "video/divx" -> "mpeg4";
+      case "video/vc1", "video/wvc1", "video/x-ms-wmv", "video/x-wmv" -> "vc1";
+      case "video/mp4v", "video/mp4v-es", "video/divx" -> "mpeg4";
       case MimeTypes.VIDEO_H263 -> "h263";
-      case MimeTypes.VIDEO_PRORES, "video/x-prores" -> "prores";
+      case "video/x-prores" -> "prores";
       case MimeTypes.VIDEO_MJPEG -> "mjpeg";
       case "video/x-flv", "video/x-flash-video" -> "flv1";
       case "video/x-vp6" -> "vp6";
