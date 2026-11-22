@@ -1,0 +1,95 @@
+name: Test Build & Pre-Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-build:
+    name: Test Build & GitHub Pre-Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Get version
+        run: |
+          VERSION=$(./gradlew properties -q | sed -n 's/^version: //p')
+          echo "VERSION_NAME=${VERSION}" >> $GITHUB_ENV
+
+      - name: Set Up JDK 17
+        uses: actions/setup-java@v6
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Install Android CLI
+        run: |
+          mkdir -p "$HOME/.local/bin"
+          curl -fsSL --retry 3 https://dl.google.com/android/cli/latest/linux_x86_64/android -o "$HOME/.local/bin/android"
+          chmod +x "$HOME/.local/bin/android"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          validate-wrappers: true
+
+      - name: Restore FFmpeg cache
+        uses: actions/cache@v4
+        id: ffmpeg-cache
+        with:
+          path: ffmpeg/output
+          key: ${{ runner.os }}-ffmpeg-${{ hashFiles('ffmpeg/setup.sh', 'gradle/libs.versions.toml') }}
+
+      - name: Install native build tools
+        run: |
+          sudo apt-get update && sudo apt-get install -y ninja-build nasm gperf python3-venv
+          python3 -m venv "$RUNNER_TEMP/native-build-tools"
+          "$RUNNER_TEMP/native-build-tools/bin/pip" install meson==1.12.0
+          echo "$RUNNER_TEMP/native-build-tools/bin" >> "$GITHUB_PATH"
+
+      - name: Check FFmpeg setup
+        run: python3 ffmpeg/test_setup.py
+
+      - name: Build and test native packages
+        run: |
+          ./gradlew assembleRelease
+          ./gradlew test
+          python3 ffmpeg/test_native_package.py
+
+      - name: Publish to Maven Local (Test)
+        run: ./gradlew publishToMavenLocal
+
+      - name: Package FFmpeg output
+        run: |
+          cd ffmpeg
+          zip -r ffmpeg-output.zip output
+
+      - name: Upload FFmpeg output artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ffmpeg-output
+          path: ffmpeg/ffmpeg-output.zip
+
+      - name: Delete existing test release and tag
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete test --yes || true
+          git push origin --delete test || true
+          git tag -d test || true
+
+      - name: Create GitHub Pre-Release
+        id: create_release
+        uses: softprops/action-gh-release@v3
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          files: ffmpeg/ffmpeg-output.zip
+          draft: false
+          name: Test Pre-Release
+          prerelease: true
+          tag_name: test
+          body: Latest automated pre-release build of FFmpeg native binaries.

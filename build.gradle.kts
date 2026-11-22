@@ -4,6 +4,8 @@ plugins {
 }
 
 // One shared producer for both modules, including parallel Gradle builds.
+val outputDir = file("ffmpeg/output")
+
 val ffmpegSetup = tasks.register<Exec>("ffmpegSetup") {
     group = "build"
     description = "Build native media libraries for all Android ABIs"
@@ -21,8 +23,73 @@ val ffmpegSetup = tasks.register<Exec>("ffmpegSetup") {
     inputs.file(file("ffmpeg/setup.sh"))
     inputs.property("ndkVersion", libs.versions.ndk.get())
     inputs.property("cmakeVersion", libs.versions.cmake.get())
-    outputs.dir(file("ffmpeg/output"))
+    outputs.dir(outputDir)
     commandLine("bash", "setup.sh")
+
+    onlyIf {
+        val needsBuild = !outputDir.exists() || outputDir.listFiles().isNullOrEmpty()
+        if (!needsBuild) {
+            println("FFmpeg native output already exists at ${outputDir.absolutePath}. Skipping setup.")
+        }
+        val isWindows = System.getProperty("os.name").lowercase().contains("win")
+        if (isWindows && needsBuild) {
+            throw GradleException(
+                "Building FFmpeg from source is not supported on Windows (requires bash, meson, nasm, etc.).\n" +
+                "Please run './gradlew downloadFfmpegPrebuilts' to download prebuilt native binaries from GitHub Releases, " +
+                "or use GitHub Actions CI for native building."
+            )
+        }
+        needsBuild
+    }
+}
+
+tasks.register("downloadFfmpegPrebuilts") {
+    group = "build"
+    description = "Download prebuilt FFmpeg native libraries from GitHub Releases"
+    doLast {
+        outputDir.mkdirs()
+        val zipFile = file("ffmpeg/ffmpeg-output.zip")
+        
+        val urlsToTry = listOf(
+            "https://github.com/Darkstar085/nextlib-extended/releases/download/test/ffmpeg-output.zip",
+            "https://github.com/Darkstar085/nextlib-extended/releases/latest/download/ffmpeg-output.zip"
+        )
+        
+        var downloaded = false
+        for (downloadUrl in urlsToTry) {
+            println("Trying to download prebuilt FFmpeg binaries from $downloadUrl...")
+            try {
+                val connection = java.net.URI(downloadUrl).toURL().openConnection() as java.net.HttpURLConnection
+                connection.instanceFollowRedirects = true
+                connection.connect()
+                if (connection.responseCode == 200) {
+                    connection.inputStream.use { input ->
+                        java.nio.file.Files.copy(input, zipFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+                    }
+                    downloaded = true
+                    break
+                }
+            } catch (_: Exception) {
+                // Try next URL
+            }
+        }
+
+        if (downloaded) {
+            try {
+                project.copy {
+                    from(zipTree(zipFile))
+                    into(outputDir)
+                }
+                zipFile.delete()
+                println("Prebuilt FFmpeg binaries successfully downloaded and extracted to ${outputDir.absolutePath}")
+            } catch (e: Exception) {
+                println("Failed to extract downloaded zip: ${e.message}")
+            }
+        } else {
+            println("Failed to download prebuilt FFmpeg binaries from all release URLs.")
+            println("Please ensure a release or pre-release with 'ffmpeg-output.zip' exists on GitHub, or place ffmpeg/output manually.")
+        }
+    }
 }
 
 val libraryVersion = libs.versions.nextlibExtended.get()
