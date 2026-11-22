@@ -58,12 +58,12 @@ nextlib-extended/
 
 ### 1. Dependency Setup
 
-Add dependencies to your module's `build.gradle.kts`:
+Add the 1.1.0 dependencies to your module's `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("io.github.darkstar085:nextlib-extended-media3ext:VERSION")
-    implementation("io.github.darkstar085:nextlib-extended-mediainfo:VERSION")
+    implementation("io.github.darkstar085:nextlib-extended-media3ext:1.1.0")
+    implementation("io.github.darkstar085:nextlib-extended-mediainfo:1.1.0")
 }
 ```
 
