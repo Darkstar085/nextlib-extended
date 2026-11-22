@@ -100,7 +100,12 @@ subprojects {
     plugins.withId(rootProject.libs.plugins.mavenPublish.get().pluginId) {
         configure<com.vanniktech.maven.publish.MavenPublishBaseExtension> {
             publishToMavenCentral()
-            signAllPublications()
+            val hasSigningProps = System.getenv("ORG_GRADLE_PROJECT_signingInMemoryKey") != null ||
+                    project.hasProperty("signing.keyId") ||
+                    project.hasProperty("signingInMemoryKey")
+            if (hasSigningProps) {
+                signAllPublications()
+            }
             coordinates(
                 groupId = "io.github.darkstar085",
                 artifactId = property("POM_ARTIFACT_ID") as String,
