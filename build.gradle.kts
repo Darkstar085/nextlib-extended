@@ -47,19 +47,23 @@ tasks.register("downloadFfmpegPrebuilts") {
     group = "build"
     description = "Download prebuilt FFmpeg native libraries from GitHub Releases"
     doLast {
-        outputDir.mkdirs()
         val zipFile = file("ffmpeg/ffmpeg-output.zip")
-        
+        zipFile.parentFile.mkdirs()
+        if (zipFile.exists()) {
+            zipFile.delete()
+        }
+
         val urlsToTry = listOf(
             "https://github.com/Darkstar085/nextlib-extended/releases/download/test/ffmpeg-output.zip",
             "https://github.com/Darkstar085/nextlib-extended/releases/latest/download/ffmpeg-output.zip"
         )
-        
+
         var downloaded = false
         for (downloadUrl in urlsToTry) {
             println("Trying to download prebuilt FFmpeg binaries from $downloadUrl...")
+            var connection: java.net.HttpURLConnection? = null
             try {
-                val connection = java.net.URI(downloadUrl).toURL().openConnection() as java.net.HttpURLConnection
+                connection = java.net.URI(downloadUrl).toURL().openConnection() as java.net.HttpURLConnection
                 connection.instanceFollowRedirects = true
                 connection.connect()
                 if (connection.responseCode == 200) {
@@ -71,19 +75,41 @@ tasks.register("downloadFfmpegPrebuilts") {
                 }
             } catch (_: Exception) {
                 // Try next URL
+            } finally {
+                connection?.disconnect()
             }
         }
 
         if (downloaded) {
+            val stagingDir = file("ffmpeg/.output-staging")
             try {
+                if (stagingDir.exists()) {
+                    stagingDir.deleteRecursively()
+                }
                 project.copy {
                     from(zipTree(zipFile))
+                    into(stagingDir)
+                }
+                if (outputDir.exists()) {
+                    println("Removing existing prebuilt FFmpeg binaries at ${outputDir.absolutePath}...")
+                    if (!outputDir.deleteRecursively()) {
+                        throw GradleException("Failed to remove existing FFmpeg output directory: ${outputDir.absolutePath}")
+                    }
+                }
+                val topLevelEntries = stagingDir.listFiles().orEmpty()
+                val extractedRoot = topLevelEntries.singleOrNull()
+                    ?.takeIf { it.isDirectory && it.name == "output" }
+                    ?: stagingDir
+                project.copy {
+                    from(extractedRoot)
                     into(outputDir)
                 }
-                zipFile.delete()
                 println("Prebuilt FFmpeg binaries successfully downloaded and extracted to ${outputDir.absolutePath}")
             } catch (e: Exception) {
                 println("Failed to extract downloaded zip: ${e.message}")
+            } finally {
+                stagingDir.deleteRecursively()
+                zipFile.delete()
             }
         } else {
             println("Failed to download prebuilt FFmpeg binaries from all release URLs.")
